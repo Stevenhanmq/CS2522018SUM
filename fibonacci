@@ -1,0 +1,27 @@
+#! /bin/bash
+ITERA=$1;
+FIRST=1
+SECOND=1
+TMP=0
+if (($# == 1))
+then
+    if [[ $ITERA =~ ^-?[0-9]+$ ]]
+    then
+	
+	for((I = 0; I < ${ITERA} ; I++))
+	do
+	    echo -n  ${FIRST}" "
+	    TMP=$((${FIRST}+${SECOND}))
+	    FIRST=${SECOND}
+	    SECOND=${TMP}
+	done
+	echo ""
+	exit 0
+    else
+	echo "Usage: fibonacci <limit>"
+	exit 1
+    fi
+else
+    echo "Usage: fibonacci <limit>"
+    exit 1
+fi

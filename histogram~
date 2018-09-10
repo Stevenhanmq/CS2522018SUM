@@ -1,0 +1,49 @@
+#! /bin/bash
+if(($# == 1))
+then
+    FILE=$1
+    if [[ -r ${FILE} ]]
+    then
+	ARR[0]=0
+	ARR[10]=0
+	ARR[20]=0
+	ARR[30]=0
+	ARR[40]=0
+	ARR[50]=0
+	ARR[60]=0
+	ARR[70]=0
+	ARR[80]=0
+	ARR[90]=0
+	ARR[100]=0
+	LINES=$(wc -l ${FILE})
+	NUMS=$(echo ${LINES} | cut -d" " -f1-1)
+	echo ${NUMS} "scores total..."
+	line=$(cat ${FILE} | cut -d$'\r' -f1-${LINES})
+#	echo ${line}'this is my line' ${I}
+	TOTAL=0;
+	for((I = 2; I <= ${NUMS}*2;I+=2))
+	do
+	    LINE=$(echo ${line} | cut -d' ' -f${I}-${I})
+	    TOTAL=$((${TOTAL}+${LINE}))
+	    NLINE=$((${LINE}/10*10))
+	    ARR[${NLINE}]=$((ARR[${NLINE}]+1))
+	done
+	AVE=$((${TOTAL}/${NUMS}))
+	for K in 100 90 80 70 60 50 40 30 20 10 0
+	do
+	    printf "%3d:" ${K}
+	    for((J = 0; J < ${ARR[K]};J++))
+	    do
+		echo -n "="
+	    done
+	    echo ""
+	done
+	echo "Average:" ${AVE}
+    else
+	echo "Error:" ${FILE}" is not readable!"
+    fi
+    
+else
+    echo "Usage: histogram <filename>"
+fi
+

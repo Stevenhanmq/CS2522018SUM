@@ -1,0 +1,39 @@
+#! /bin/bash
+if(($# == 1))
+then
+    echo "Usage: compile"
+    exit 1;
+else
+    FILES=$(ls | grep "\.c")
+    DATA=$(ls | grep "\.data")
+#    echo ${DATA}
+    COUNTS=$(ls | grep -c "\.c")
+    DATACOUNTS=$(ls | grep -c "\.data")
+#    echo ${DATACOUNTS}
+    for (( I = 1; I <= ${COUNTS}; I++))
+    do
+	CURRENT=$(echo ${FILES} | cut -d' ' -f${I}-${I})
+	echo "C program: "${CURRENT}
+	gcc -Wall -std=c99 ${CURRENT}
+	if (($? == 0))
+	then
+	    echo "Successfully compiled!"
+	    for ((J = 1; J <= ${DATACOUNTS}; J++))
+	    do
+		CURRENTDATA=$(echo ${DATA} | cut -d' ' -f${J}-${J})
+		echo "Input file: "${CURRENTDATA}
+		a.out<${CURRENTDATA}
+		if (($? == 0))
+		then
+		    echo "Run successful."
+		else
+		    echo "Run failed on "${CURRENTDATA}"."
+		fi
+	    done
+	else
+	    echo "Compilation of "${CURRENT}" failed!"
+	fi
+	echo ""
+    done
+    exit 0;
+fi
